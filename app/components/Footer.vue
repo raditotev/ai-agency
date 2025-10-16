@@ -5,9 +5,5 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
-
-  const currentYear = computed(() => {
-    return new Date().getFullYear()
-  })
+  const currentYear = computed(() => new Date().getFullYear())
 </script>

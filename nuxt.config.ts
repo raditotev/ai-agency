@@ -1,30 +1,23 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  // Static generation
   nitro: {
     prerender: {
       routes: ['/'],
     },
   },
 
-  // SEO and performance
   modules: ['@nuxtjs/sitemap', '@nuxtjs/robots'],
 
-  // Site configuration for sitemap
   site: {
     url: 'https://www.radi.pro',
   },
 
-  // Runtime config for environment variables
   runtimeConfig: {
-    // Private keys (only available on server-side)
     web3formsAccessKey: process.env.WEB3FORMS_ACCESS_KEY || '',
   },
 
-  // App configuration
   app: {
     head: {
       title: 'RadiPro - Custom AI Solutions for Businesses',
