@@ -1,12 +1,11 @@
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig()
   const body = await readBody(event)
 
+  // Get the access key directly from environment variables
+  const web3formsAccessKey = process.env.WEB3FORMS_ACCESS_KEY
+
   // Check if web3forms access key is configured
-  if (
-    !config.web3formsAccessKey ||
-    config.web3formsAccessKey === 'your_access_key_here'
-  ) {
+  if (!web3formsAccessKey || web3formsAccessKey === 'your_access_key_here') {
     console.error('WEB3FORMS_ACCESS_KEY is not configured')
     throw createError({
       statusCode: 500,
@@ -54,7 +53,7 @@ export default defineEventHandler(async (event) => {
         'Content-Type': 'application/json',
       },
       body: {
-        access_key: config.web3formsAccessKey,
+        access_key: web3formsAccessKey,
         name: body.name,
         company: body.company || '',
         email: body.email,

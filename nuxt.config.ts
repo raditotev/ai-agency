@@ -16,7 +16,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Private keys (only available on server-side)
-    web3formsAccessKey: process.env.WEB3FORMS_ACCESS_KEY || '',
+    web3formsAccessKey: '',
   },
 
   app: {

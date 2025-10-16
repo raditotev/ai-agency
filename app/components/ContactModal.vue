@@ -191,6 +191,7 @@
     isSubmitting.value = true
 
     try {
+      // Submit to our secure API endpoint
       const response = await $fetch('/api/contact', {
         method: 'POST',
         body: {
@@ -199,6 +200,7 @@
           email: form.email,
           service: form.service,
           message: form.message,
+          website: form.website, // Include honeypot
         },
       })
 
