@@ -119,7 +119,7 @@
 </template>
 
 <script setup>
-  import { ref, reactive, watch } from 'vue'
+  import { ref, reactive, watch, onMounted, onUnmounted } from 'vue'
 
   const props = defineProps({
     isOpen: {
@@ -218,9 +218,18 @@
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert(
+
+      // Try to extract specific error message from the server
+      let errorMessage =
         'Sorry, there was an error sending your message. Please try again or contact us directly.'
-      )
+
+      if (error.data?.statusMessage) {
+        errorMessage = error.data.statusMessage
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+
+      alert(errorMessage)
     } finally {
       isSubmitting.value = false
     }
@@ -237,7 +246,7 @@
 
   // Focus trap for accessibility
   const trapFocus = (e) => {
-    if (!isOpen.value) return
+    if (!props.isOpen) return
 
     const focusableElements =
       'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
