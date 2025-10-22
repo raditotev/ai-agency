@@ -1,9 +1,10 @@
 services:
   web:
+    image: ai-agency:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: agency-website
+    container_name: ai-agency
     ports:
       - '${PORT:-3000}:3000'
     restart: unless-stopped
