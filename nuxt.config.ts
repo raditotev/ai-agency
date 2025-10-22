@@ -74,6 +74,20 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
         },
       ],
+      script: [
+        {
+          async: true,
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-FFG1H90R9H',
+        },
+        {
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-FFG1H90R9H');
+          `,
+        },
+      ],
     },
   },
 })
