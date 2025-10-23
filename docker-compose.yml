@@ -7,7 +7,7 @@ services:
     container_name: ai-agency
     ports:
       - '${PORT:-3000}:3000'
-    restart: unless-stopped
+    restart: on-failure
     environment:
       - NODE_ENV=production
       - PORT=3000
