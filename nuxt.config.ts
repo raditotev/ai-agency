@@ -20,7 +20,6 @@ export default defineNuxtConfig({
   },
 
   gtag: {
-    enabled: process.env.NODE_ENV === 'production',
     id: 'G-FFG1H90R9H',
     config: {
       send_page_view: true,
