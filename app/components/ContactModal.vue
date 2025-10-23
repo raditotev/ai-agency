@@ -26,6 +26,7 @@
             required
             minlength="2"
             :class="{ error: errors.name }"
+            @focus="trackFormInteraction('name', 'focus')"
           />
           <span v-if="errors.name" class="error-message">{{
             errors.name
@@ -34,7 +35,12 @@
 
         <div class="form-group">
           <label for="company">Company Name</label>
-          <input id="company" v-model="form.company" type="text" />
+          <input
+            id="company"
+            v-model="form.company"
+            type="text"
+            @focus="trackFormInteraction('company', 'focus')"
+          />
         </div>
 
         <div class="form-group">
@@ -45,6 +51,7 @@
             type="email"
             required
             :class="{ error: errors.email }"
+            @focus="trackFormInteraction('email', 'focus')"
           />
           <span v-if="errors.email" class="error-message">{{
             errors.email
@@ -60,6 +67,8 @@
             v-model="form.service"
             required
             :class="{ error: errors.service }"
+            @change="trackFormInteraction('service', 'change')"
+            @focus="trackFormInteraction('service', 'focus')"
           >
             <option value="">Select a service</option>
             <option value="Custom Fine-Tuned Models">
@@ -87,6 +96,7 @@
             v-model="form.message"
             rows="4"
             placeholder="Tell us about your project..."
+            @focus="trackFormInteraction('message', 'focus')"
           ></textarea>
         </div>
 
@@ -133,6 +143,12 @@
   })
 
   const emit = defineEmits(['close'])
+  const {
+    trackFormInteraction,
+    trackFormSubmission,
+    trackModalOpen,
+    trackModalClose,
+  } = useAnalytics()
 
   const form = reactive({
     name: '',
@@ -156,6 +172,16 @@
       }
     },
     { immediate: true }
+  )
+
+  // Watch for modal open/close to track events
+  watch(
+    () => props.isOpen,
+    (isOpen) => {
+      if (isOpen) {
+        trackModalOpen('contact_form', props.preselectedService)
+      }
+    }
   )
 
   const validateForm = () => {
@@ -206,6 +232,7 @@
 
       if (response.success) {
         isSubmitted.value = true
+        trackFormSubmission(true, form.service)
         // Reset form
         Object.assign(form, {
           name: '',
@@ -231,6 +258,7 @@
         errorMessage = error.message
       }
 
+      trackFormSubmission(false, form.service, errorMessage)
       alert(errorMessage)
     } finally {
       isSubmitting.value = false
@@ -238,6 +266,7 @@
   }
 
   const closeModal = () => {
+    trackModalClose('contact_form', isSubmitted.value ? 'success' : 'abandoned')
     emit('close')
     // Reset form state when closing
     setTimeout(() => {

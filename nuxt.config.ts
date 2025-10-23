@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxtjs/sitemap', '@nuxtjs/robots'],
+  modules: ['@nuxtjs/sitemap', '@nuxtjs/robots', 'nuxt-gtag'],
 
   site: {
     url: 'https://www.radi.pro',
@@ -17,6 +17,15 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys (only available on server-side)
     web3formsAccessKey: '',
+  },
+
+  gtag: {
+    enabled: process.env.NODE_ENV === 'production',
+    id: 'G-FFG1H90R9H',
+    config: {
+      send_page_view: true,
+      page_title: 'Home page',
+    },
   },
 
   app: {
@@ -74,20 +83,7 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
         },
       ],
-      script: [
-        {
-          async: true,
-          src: 'https://www.googletagmanager.com/gtag/js?id=G-FFG1H90R9H',
-        },
-        {
-          innerHTML: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-FFG1H90R9H');
-          `,
-        },
-      ],
+      script: [],
     },
   },
 })

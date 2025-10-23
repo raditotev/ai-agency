@@ -35,8 +35,10 @@
 
   const emit = defineEmits(['inquire'])
   const cardRef = ref(null)
+  const { trackServiceInquiry } = useAnalytics()
 
   const handleInquire = () => {
+    trackServiceInquiry(props.title)
     emit('inquire', props.title)
   }
 
