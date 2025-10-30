@@ -52,8 +52,10 @@ cp env.example .env
 Edit `.env` and set your configuration:
 
 ```bash
-# Required: Get your access key from https://web3forms.com
-WEB3FORMS_ACCESS_KEY=your_actual_access_key_here
+# Mailer (Resend API - Cloudflare Workers compatible)
+RESEND_API_KEY=re_your_api_key_here
+NUXT_MAILER_FROM=noreply@radi.pro
+NUXT_MAILER_TO=you@radi.pro
 
 # Optional: Change port if needed (default: 3000)
 PORT=3000
@@ -295,12 +297,39 @@ Regularly backup your:
 
 ## Security Notes
 
-- The `WEB3FORMS_ACCESS_KEY` is kept secure on the server side and never exposed to the client
-- The contact form submits to our secure API endpoint which handles the Web3Forms integration
+- Mail is sent server-side via Resend API (Cloudflare Workers compatible)
+- The contact form submits to our secure API endpoint which handles email sending
+- Resend API key is stored server-side only and never exposed to the client
 - Keep your `.env` file secure and never commit it to version control
 - Regularly update Docker images and dependencies
 - Use non-root users in production when possible
 - Consider using Docker secrets for sensitive data in production
+
+## Resend API Setup
+
+To set up Resend for email sending:
+
+1. Create a Resend account:
+
+   - Visit [Resend](https://resend.com) and sign up for a free account
+   - The free tier includes 3,000 emails per month
+
+2. Get your API key:
+
+   - Go to [Resend API Keys](https://resend.com/api-keys)
+   - Click "Create API Key"
+   - Give it a name (e.g., "RadiPro Docker")
+   - Copy the API key (starts with `re_`)
+
+3. Verify your domain (or use the test domain):
+
+   - Go to [Resend Domains](https://resend.com/domains)
+   - Add and verify your domain (for production)
+   - Or use the provided test domain for development/testing
+
+4. Add the credentials to your `.env` file as shown in the configuration section above
+
+**Note**: The `NUXT_MAILER_FROM` email address must be verified in your Resend account before sending emails.
 
 ## Support
 

@@ -27,3 +27,6 @@ logs
 .cursor
 PRD.md
 AGENT.md
+
+# Cloudflare
+.wrangler

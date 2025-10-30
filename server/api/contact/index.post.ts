@@ -1,12 +1,11 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  // Get the access key directly from environment variables
-  const web3formsAccessKey = process.env.WEB3FORMS_ACCESS_KEY
-
-  // Check if web3forms access key is configured
-  if (!web3formsAccessKey || web3formsAccessKey === 'your_access_key_here') {
-    console.error('WEB3FORMS_ACCESS_KEY is not configured')
+  const { resendApiKey, mailerFrom, mailerTo } = useRuntimeConfig()
+  if (!resendApiKey || !mailerFrom || !mailerTo) {
+    console.error(
+      'Mailer is not configured: missing resendApiKey, mailerFrom, or mailerTo'
+    )
     throw createError({
       statusCode: 500,
       statusMessage:
@@ -47,32 +46,49 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const response = await $fetch('https://api.web3forms.com/submit', {
+    const messageText = [
+      `New contact inquiry for ${body.service}`,
+      '',
+      `Name: ${body.name}`,
+      `Email: ${body.email}`,
+      body.company ? `Company: ${body.company}` : 'No company provided',
+      '',
+      'Message:',
+      body.message || '(no message)',
+    ]
+      .filter(Boolean)
+      .join('\n')
+
+    // In local/dev environments, skip actual email sending
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[DEV] Skipping email send. Would send to:', mailerTo)
+      return { success: true, message: 'Message queued (dev mode)' }
+    }
+
+    // Send email using Resend API (Cloudflare Workers compatible)
+    const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${resendApiKey}`,
       },
-      body: {
-        access_key: web3formsAccessKey,
-        name: body.name,
-        company: body.company || '',
-        email: body.email,
-        service: body.service,
-        message: body.message || '',
+      body: JSON.stringify({
+        from: `${body.name || 'Website Contact'} <${mailerFrom}>`,
+        to: mailerTo,
+        replyTo: `${body.name} <${body.email}>`,
         subject: `New inquiry for ${body.service}`,
-        from_name: body.name,
-        reply_to: body.email,
-      },
+        text: messageText,
+      }),
     })
 
-    if ((response as any).success) {
-      return { success: true, message: 'Message sent successfully' }
-    } else {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to send message',
-      })
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      console.error('Resend API error:', errorData)
+      throw new Error(`Failed to send email: ${response.statusText}`)
     }
+
+    const result = await response.json()
+    return { success: true, message: 'Message sent successfully' }
   } catch (error) {
     console.error('Error submitting form:', error)
     throw createError({

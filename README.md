@@ -7,7 +7,7 @@ A modern, single-page website for RadiPro AI agency built with Nuxt.js v4.x and 
 - **Responsive Design**: Mobile-first approach with breakpoints at 640px, 768px, and 1024px
 - **Hero Section**: Full-viewport gradient background with smooth animations
 - **Services Section**: 6 AI services with interactive cards and hover effects
-- **Contact Modal**: Form with validation and Web3Forms integration
+- **Contact Modal**: Form with validation and Resend email integration
 - **Back-to-Top Button**: Appears on scroll with smooth animation
 - **SEO Optimized**: Meta tags, structured data, and sitemap generation
 - **Accessibility**: ARIA labels, keyboard navigation, and screen reader support
@@ -18,7 +18,7 @@ A modern, single-page website for RadiPro AI agency built with Nuxt.js v4.x and 
 - **Framework**: Nuxt.js v4.x with static generation
 - **Styling**: Custom CSS with CSS Grid and Flexbox
 - **Icons**: Custom SVG icons (Heroicons style)
-- **Forms**: Web3Forms.com for serverless form handling
+- **Forms**: Resend API for secure email delivery (Cloudflare Workers compatible)
 - **Fonts**: Google Fonts (Inter)
 - **Deployment**: Static site ready for Vercel/Netlify
 
@@ -59,13 +59,15 @@ npm install
 cp env.example .env
 ```
 
-4. Edit `.env` and add your Web3Forms access key:
+4. Edit `.env` and add your Resend credentials:
 
 ```
-WEB3FORMS_ACCESS_KEY=your_access_key_here
+RESEND_API_KEY=re_your_api_key_here
+NUXT_MAILER_FROM=noreply@radi.pro
+NUXT_MAILER_TO=recipient@example.com
 ```
 
-**Security Note**: The Web3Forms access key is now stored server-side only and never exposed to the client. This ensures your API key remains secure.
+**Security Note**: Resend API key is stored server-side only and never exposed to the client. Get your API key at [Resend API Keys](https://resend.com/api-keys). The `NUXT_MAILER_FROM` email must be verified in your Resend account.
 
 ### Development
 
@@ -97,22 +99,6 @@ npm run preview
 
 ## Deployment
 
-### Vercel (Recommended)
-
-1. Connect your GitHub repository to Vercel
-2. Set the build command to `npm run generate`
-3. Set the output directory to `.output/public`
-4. Add environment variable `WEB3FORMS_ACCESS_KEY` (server-side only)
-5. Deploy
-
-### Netlify
-
-1. Connect your GitHub repository to Netlify
-2. Set the build command to `npm run generate`
-3. Set the publish directory to `.output/public`
-4. Add environment variable `WEB3FORMS_ACCESS_KEY` (server-side only)
-5. Deploy
-
 ### Manual Deployment
 
 1. Run `npm run generate`
@@ -121,12 +107,35 @@ npm run preview
 
 ## Configuration
 
-### Web3Forms Setup
+### Resend Email Setup
 
-1. Visit [Web3Forms.com](https://web3forms.com)
-2. Create an account and get your access key
-3. Add the key to your `.env` file
-4. The form will automatically send emails to your registered email address
+1. Create a Resend account:
+
+   - Visit [Resend](https://resend.com) and sign up for a free account
+   - The free tier includes 3,000 emails per month
+
+2. Get your API key:
+
+   - Go to [Resend API Keys](https://resend.com/api-keys)
+   - Click "Create API Key"
+   - Give it a name (e.g., "RadiPro Website")
+   - Copy the API key (starts with `re_`)
+
+3. Verify your domain (or use the test domain):
+
+   - Go to [Resend Domains](https://resend.com/domains)
+   - Add and verify your domain (for production)
+   - Or use the provided test domain for development/testing
+
+4. Add credentials to your `.env` file:
+
+   - `RESEND_API_KEY`: Your Resend API key (starts with `re_`)
+   - `NUXT_MAILER_FROM`: The verified sender email address (e.g., `noreply@yourdomain.com`)
+   - `NUXT_MAILER_TO`: The email address where contact form submissions should be sent
+
+5. The form will automatically send emails via Resend API when submitted
+
+**Note**: Resend is compatible with Cloudflare Workers and Pages, making it ideal for serverless deployments.
 
 ### Customization
 

@@ -18,7 +18,9 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Private keys (only available on server-side)
-    web3formsAccessKey: '',
+    resendApiKey: process.env.RESEND_API_KEY,
+    mailerFrom: process.env.NUXT_MAILER_FROM,
+    mailerTo: process.env.NUXT_MAILER_TO,
   },
 
   gtag: {
