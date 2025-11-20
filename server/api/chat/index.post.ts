@@ -49,8 +49,8 @@ export default defineEventHandler(async (event) => {
       cfAccessClientId &&
       cfAccessClientSecret
     ) {
-      headers['cf-access-client-id'] = cfAccessClientId as string
-      headers['cf-client-secret'] = cfAccessClientSecret as string
+      headers['CF-Access-Client-Id'] = cfAccessClientId as string
+      headers['CF-Access-Client-Secret'] = cfAccessClientSecret as string
     }
 
     // Call Ollama API
