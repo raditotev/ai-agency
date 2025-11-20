@@ -9,6 +9,7 @@
 
     <Footer />
     <BackToTop />
+    <Chatbot />
 
     <ContactModal
       :is-open="isModalOpen"
