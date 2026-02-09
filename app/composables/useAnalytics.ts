@@ -1,29 +1,40 @@
-export const useAnalytics = () => {
-  const { gtag } = useGtag()
+/** Provided by @nuxtjs/plausible (auto-imported) */
+declare function useTrackEvent(
+  eventName: string,
+  options?: { props?: Record<string, string> }
+): void
 
-  const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
-    gtag('event', eventName, {
-      ...parameters,
-      event_category: 'engagement',
-      event_label:
-        parameters?.service_name || parameters?.form_field || 'general',
-    })
+export const useAnalytics = () => {
+  function safeTrack(
+    eventName: string,
+    options?: { props?: Record<string, string> }
+  ) {
+    if (import.meta.client) {
+      useTrackEvent(eventName, { props: options?.props ?? {} })
+    }
+  }
+
+  const trackEvent = (
+    eventName: string,
+    parameters?: Record<string, string | undefined>
+  ) => {
+    const props =
+      parameters &&
+      Object.fromEntries(
+        Object.entries(parameters).filter(
+          (entry): entry is [string, string] => entry[1] != null
+        )
+      )
+    safeTrack(eventName, { props })
   }
 
   const trackServiceInquiry = (serviceName: string) => {
-    gtag('event', 'service_inquiry', {
-      service_name: serviceName,
-      event_category: 'service_interaction',
-      event_label: serviceName,
-    })
+    safeTrack('Service Inquiry', { props: { service: serviceName } })
   }
 
   const trackFormInteraction = (fieldName: string, action: string) => {
-    gtag('event', 'form_interaction', {
-      form_field: fieldName,
-      interaction_type: action,
-      event_category: 'form_engagement',
-      event_label: fieldName,
+    safeTrack('Form Interaction', {
+      props: { field: fieldName, action },
     })
   }
 
@@ -32,37 +43,27 @@ export const useAnalytics = () => {
     serviceName?: string,
     errorMessage?: string
   ) => {
-    gtag('event', success ? 'form_submit_success' : 'form_submit_error', {
-      service_name: serviceName,
-      error_message: errorMessage,
-      event_category: 'form_conversion',
-      event_label: serviceName || 'contact_form',
-    })
+    const props: Record<string, string> = {}
+    if (serviceName) props.service = serviceName
+    if (errorMessage) props.error = errorMessage
+    safeTrack(success ? 'Form Submit Success' : 'Form Submit Error', { props })
   }
 
   const trackScrollDepth = (percentage: number) => {
-    gtag('event', 'scroll', {
-      scroll_percentage: percentage,
-      event_category: 'engagement',
-      event_label: `${percentage}%`,
+    safeTrack('Scroll', {
+      props: { depth: `${percentage}%` },
     })
   }
 
   const trackModalOpen = (modalType: string, preselectedService?: string) => {
-    gtag('event', 'modal_open', {
-      modal_type: modalType,
-      preselected_service: preselectedService,
-      event_category: 'user_interaction',
-      event_label: modalType,
-    })
+    const props: Record<string, string> = { modal: modalType }
+    if (preselectedService) props.service = preselectedService
+    safeTrack('Modal Open', { props })
   }
 
   const trackModalClose = (modalType: string, reason: string) => {
-    gtag('event', 'modal_close', {
-      modal_type: modalType,
-      close_reason: reason,
-      event_category: 'user_interaction',
-      event_label: modalType,
+    safeTrack('Modal Close', {
+      props: { modal: modalType, reason },
     })
   }
 

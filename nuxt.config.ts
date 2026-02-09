@@ -10,7 +10,14 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['@nuxtjs/sitemap', '@nuxtjs/robots', 'nuxt-gtag'],
+  modules: ['@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/plausible'],
+
+  plausible: {
+    // Allow tracking on localhost (development)
+    ignoredHostnames: [],
+    domain: 'ai.radi.pro',
+    apiHost: 'https://analytics.radi.pro',
+  },
 
   site: {
     url: 'https://www.radi.pro',
@@ -25,14 +32,6 @@ export default defineNuxtConfig({
     ollamaModelName: process.env.OLLAMA_MODEL_NAME,
     cfAccessClientId: process.env.CF_ACCESS_CLIENT_ID,
     cfAccessClientSecret: process.env.CF_ACCESS_CLIENT_SECRET,
-  },
-
-  gtag: {
-    id: 'G-FFG1H90R9H',
-    config: {
-      send_page_view: true,
-      page_title: 'Home page',
-    },
   },
 
   app: {
