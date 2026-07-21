@@ -28,10 +28,8 @@ export default defineNuxtConfig({
     resendApiKey: process.env.RESEND_API_KEY,
     mailerFrom: process.env.NUXT_MAILER_FROM,
     mailerTo: process.env.NUXT_MAILER_TO,
-    ollamaServerUrl: process.env.OLLAMA_SERVER_URL,
-    ollamaModelName: process.env.OLLAMA_MODEL_NAME,
-    cfAccessClientId: process.env.CF_ACCESS_CLIENT_ID,
-    cfAccessClientSecret: process.env.CF_ACCESS_CLIENT_SECRET,
+    // Modal-hosted RadiPro chat endpoint (streams plain-text tokens).
+    modalChatUrl: process.env.MODAL_CHAT_URL,
   },
 
   app: {

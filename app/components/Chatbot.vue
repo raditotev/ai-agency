@@ -57,6 +57,10 @@
         <!-- Loading Indicator -->
         <div v-if="isLoading" class="message bot-message">
           <div class="message-content">
+            <p v-if="isWarming" class="warming-text">
+              Warming up the model — this can take a moment on the first
+              message…
+            </p>
             <div class="typing-indicator">
               <span></span>
               <span></span>
@@ -96,10 +100,13 @@
   const messages = ref([])
   const inputMessage = ref('')
   const isLoading = ref(false)
+  const isWarming = ref(false)
   const messagesContainer = ref(null)
   const inputRef = ref(null)
 
   const WELCOME_STORAGE_KEY = 'chatbot_welcome_shown'
+  // How long to wait for the first token before assuming Modal is cold-starting.
+  const WARMING_DELAY_MS = 2500
 
   const openChat = () => {
     isOpen.value = true
@@ -149,31 +156,73 @@
 
     scrollToBottom()
     isLoading.value = true
+    isWarming.value = false
+
+    // Snapshot the whole conversation for the stateless Modal endpoint. The user
+    // turn was just pushed above, so it's already the last message.
+    const payloadMessages = messages.value.map((m) => ({
+      role: m.role,
+      content: m.content,
+    }))
+
+    // The assistant bubble is created lazily on the first streamed token so the
+    // typing indicator stays visible until the model actually starts replying.
+    let assistantMessage = null
+
+    // If the first token is slow to arrive, Modal is likely cold-starting the
+    // container — show a "warming up" hint instead of plain typing dots.
+    const warmingTimer = setTimeout(() => {
+      if (!assistantMessage) isWarming.value = true
+    }, WARMING_DELAY_MS)
 
     try {
-      const response = await $fetch('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
-        body: {
-          message: userMessage,
-        },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: payloadMessages }),
       })
 
-      if (response.success && response.response) {
-        messages.value.push({
-          role: 'assistant',
-          content: response.response,
-        })
-      } else {
-        throw new Error(response.error || 'Failed to get response')
+      if (!response.ok || !response.body) {
+        throw new Error('Failed to get response')
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+
+        const text = decoder.decode(value, { stream: true })
+        if (!text) continue
+
+        if (!assistantMessage) {
+          // First token arrived: stop warming, hide the indicator, open bubble.
+          clearTimeout(warmingTimer)
+          isWarming.value = false
+          isLoading.value = false
+          messages.value.push({ role: 'assistant', content: '' })
+          assistantMessage = messages.value[messages.value.length - 1]
+        }
+
+        assistantMessage.content += text
+        scrollToBottom()
+      }
+
+      if (!assistantMessage || !assistantMessage.content) {
+        throw new Error('Empty response from AI')
       }
     } catch (error) {
       console.error('Error sending message:', error)
-      messages.value.push({
-        role: 'assistant',
-        content:
-          'Sorry, I encountered an error. Please try again or use the contact form for assistance.',
-      })
+      if (!assistantMessage) {
+        messages.value.push({ role: 'assistant', content: '' })
+        assistantMessage = messages.value[messages.value.length - 1]
+      }
+      assistantMessage.content =
+        'Sorry, I encountered an error. Please try again or use the contact form for assistance.'
     } finally {
+      clearTimeout(warmingTimer)
+      isWarming.value = false
       isLoading.value = false
       scrollToBottom()
       nextTick(() => {
@@ -331,6 +380,13 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     font-size: 0.875rem;
     opacity: 0.8;
+  }
+
+  .warming-text {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    opacity: 0.7;
   }
 
   .typing-indicator {

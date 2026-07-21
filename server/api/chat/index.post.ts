@@ -1,17 +1,15 @@
+interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
 
-  const {
-    ollamaServerUrl,
-    ollamaModelName,
-    cfAccessClientId,
-    cfAccessClientSecret,
-  } = useRuntimeConfig()
+  const { modalChatUrl } = useRuntimeConfig()
 
-  if (!ollamaServerUrl || !ollamaModelName) {
-    console.error(
-      'Ollama is not configured: missing OLLAMA_SERVER_URL or OLLAMA_MODEL_NAME'
-    )
+  if (!modalChatUrl) {
+    console.error('Chat is not configured: missing MODAL_CHAT_URL')
     throw createError({
       statusCode: 500,
       statusMessage:
@@ -19,82 +17,66 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Validate message
-  if (!body.message || typeof body.message !== 'string') {
+  // Validate the conversation. The Modal endpoint expects a `messages` array of
+  // user/assistant turns; the system prompt is baked into the model server-side.
+  const rawMessages = Array.isArray(body?.messages) ? body.messages : null
+
+  if (!rawMessages || rawMessages.length === 0) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Message is required',
+      statusMessage: 'At least one message is required',
     })
   }
 
-  const userMessage = body.message.trim()
+  const messages: ChatMessage[] = rawMessages
+    .filter(
+      (m: unknown): m is ChatMessage =>
+        !!m &&
+        typeof (m as ChatMessage).role === 'string' &&
+        typeof (m as ChatMessage).content === 'string'
+    )
+    .map((m) => ({ role: m.role, content: m.content.trim() }))
+    .filter((m) => m.content.length > 0)
 
-  if (!userMessage) {
+  if (messages.length === 0) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Message cannot be empty',
     })
   }
 
+  // Call the Modal chat endpoint. It already streams plain-text tokens, so we
+  // just forward the bytes straight through to the browser as they arrive.
+  // The first byte may take a while: Modal cold-starts the container (and pulls
+  // the model on first run) before the endpoint runs.
+  let upstream: Response
   try {
-    // Construct the Ollama API URL
-    const ollamaUrl = `${ollamaServerUrl}/api/generate`
-
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-    }
-
-    if (
-      process.env.NODE_ENV === 'production' &&
-      cfAccessClientId &&
-      cfAccessClientSecret
-    ) {
-      headers['CF-Access-Client-Id'] = cfAccessClientId as string
-      headers['CF-Access-Client-Secret'] = cfAccessClientSecret as string
-    }
-
-    // Call Ollama API
-    const response = await fetch(ollamaUrl, {
+    upstream = await fetch(modalChatUrl, {
       method: 'POST',
-      headers,
-      body: JSON.stringify({
-        model: ollamaModelName,
-        prompt: userMessage,
-        stream: false,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages }),
     })
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => 'Unknown error')
-      console.error('Ollama API error:', response.status, errorText)
-      throw new Error(`Failed to get response from AI: ${response.statusText}`)
-    }
-
-    const result = await response.json()
-
-    // Ollama returns the response in the 'response' field
-    if (result.response) {
-      return {
-        success: true,
-        response: result.response,
-      }
-    } else {
-      createError({
-        statusCode: 500,
-        statusMessage: 'Invalid response format from Ollama',
-      })
-    }
   } catch (error: unknown) {
-    console.error('Error calling Ollama:', error)
-
-    // If it's already a createError (H3Error), re-throw it
-    if (error && typeof error === 'object' && 'statusCode' in error) {
-      throw error
-    } else {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Failed to get response from AI. Please try again.',
-      })
-    }
+    console.error('Error calling Modal chat endpoint:', error)
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Failed to get response from AI. Please try again.',
+    })
   }
+
+  if (!upstream.ok || !upstream.body) {
+    const errorText = await upstream.text().catch(() => 'Unknown error')
+    console.error('Modal chat endpoint error:', upstream.status, errorText)
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Failed to get response from AI. Please try again.',
+    })
+  }
+
+  // Disable buffering so tokens reach the browser as soon as they stream in.
+  setResponseHeader(event, 'Content-Type', 'text/plain; charset=utf-8')
+  setResponseHeader(event, 'Cache-Control', 'no-cache')
+  setResponseHeader(event, 'X-Accel-Buffering', 'no')
+
+  return upstream.body
 })
