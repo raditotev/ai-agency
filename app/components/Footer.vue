@@ -1,6 +1,12 @@
 <template>
   <footer class="footer">
-    <p>&copy; {{ currentYear }} RadiPro</p>
+    <div class="footer-inner">
+      <div class="wordmark">RadiPro</div>
+      <div class="footer-links">
+        <a href="#services">Services</a>
+        <span>&copy; {{ currentYear }}</span>
+      </div>
+    </div>
   </footer>
 </template>
 
