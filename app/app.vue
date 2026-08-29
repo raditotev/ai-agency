@@ -3,8 +3,9 @@
     <NuxtRouteAnnouncer />
 
     <main>
-      <Hero />
+      <Hero @inquire="openContactModal" />
       <Services @inquire="openContactModal" />
+      <ContactCta @inquire="openContactModal" />
     </main>
 
     <Footer />

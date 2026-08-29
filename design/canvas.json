@@ -1,0 +1,51 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 2700,
+      "title": "RadiPro - Desktop",
+      "print": "flow",
+      "is_interactive": true
+    },
+    {
+      "file": "Mobile.dc.html",
+      "x": 1600,
+      "y": 0,
+      "w": 390,
+      "h": 4050,
+      "title": "RadiPro - Mobile 390px",
+      "print": "flow"
+    },
+    {
+      "file": "DirectionB.dc.html",
+      "x": 2110,
+      "y": 0,
+      "w": 1440,
+      "h": 1500,
+      "title": "Alternate direction - Bento",
+      "print": "flow"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-grid",
+      "x": 0,
+      "y": -300,
+      "w": 620,
+      "text": "THE CARD-COUNT PROBLEM\n\nEight services land as 3 + 3 + 2. The grid is flex-wrap with justify-content: center and cards at flex: 0 1 352px (no grow), so the two leftovers centre under the row above instead of hanging left. It holds at any count and any screen width, with no breakpoint per count.\n\nClick the filter chips to change the count live (Build 3, Integrate 4, Advise 1), or drag the extraServices tweak from 0 to 4 to add spare slots - the rows never go ragged.\n\nWhy not CSS grid auto-fit? minmax leaves the remainder left-aligned - exactly the ragged edge you do not like."
+    },
+    {
+      "id": "note-dir-b",
+      "x": 2110,
+      "y": -300,
+      "w": 620,
+      "text": "ALTERNATE DIRECTION - BENTO\n\nDifferent on two axes: warmer paper palette with a heavy grotesque display face, and a deliberately unequal tile mosaic (3+3 / 2+2+2 / 2+2+2) where uniformity was never promised, so a short row cannot read as an orphan.\n\nTradeoff: it looks the most intentional of the two, but the span pattern has to be re-tuned by hand every time the service count changes. The Main direction absorbs new services on its own."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

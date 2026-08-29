@@ -71,18 +71,9 @@
             @focus="trackFormInteraction('service', 'focus')"
           >
             <option value="">Select a service</option>
-            <option value="Custom Fine-Tuned Models">
-              Custom Fine-Tuned Models
+            <option v-for="s in services" :key="s.id" :value="s.title">
+              {{ s.title }}
             </option>
-            <option value="RAG (Retrieval-Augmented Generation)">
-              RAG (Retrieval-Augmented Generation)
-            </option>
-            <option value="AI Automations">AI Automations</option>
-            <option value="Private AI">Private AI</option>
-            <option value="Chatbot and Conversational AI Development">
-              Chatbot and Conversational AI Development
-            </option>
-            <option value="AI Consulting">AI Consulting</option>
           </select>
           <span v-if="errors.service" class="error-message">{{
             errors.service
@@ -141,6 +132,8 @@
       default: '',
     },
   })
+
+  const services = SERVICES
 
   const emit = defineEmits(['close'])
   const {

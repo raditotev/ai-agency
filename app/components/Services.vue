@@ -1,66 +1,59 @@
 <template>
   <section id="services" class="services">
-    <h2>Our Services</h2>
-    <div class="services-grid">
-      <ServiceCard
-        v-for="service in services"
-        :key="service.id"
-        :title="service.title"
-        :description="service.description"
-        :icon="service.icon"
-        @inquire="openContactModal"
-      />
+    <div class="services-inner">
+      <div class="services-header">
+        <div>
+          <p class="eyebrow">Services</p>
+          <h2>Eight ways we put AI to work.</h2>
+        </div>
+        <p class="services-lede">
+          Every engagement starts with your data and your constraints. Pick a
+          starting point, or ask us where the leverage is.
+        </p>
+      </div>
+
+      <div class="service-filters" role="group" aria-label="Filter services">
+        <button
+          v-for="option in filters"
+          :key="option"
+          class="filter-chip"
+          type="button"
+          :aria-pressed="activeFilter === option"
+          @click="activeFilter = option"
+        >
+          {{ option }}
+        </button>
+        <span class="filter-count" aria-live="polite">
+          {{ visibleServices.length }} of {{ SERVICES.length }} shown
+        </span>
+      </div>
+
+      <div class="services-grid">
+        <ServiceCard
+          v-for="service in visibleServices"
+          :key="service.id"
+          :title="service.title"
+          :tag="service.tag"
+          :description="service.description"
+          :icon="service.icon"
+          @inquire="openContactModal"
+        />
+      </div>
     </div>
   </section>
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
 
-  const services = ref([
-    {
-      id: 1,
-      title: 'Custom Fine-Tuned Models',
-      description:
-        'We fine-tune AI models precisely to your data and business needs, ensuring high performance for specialized tasks like prediction or content generation.',
-      icon: 'brain',
-    },
-    {
-      id: 2,
-      title: 'RAG (Retrieval-Augmented Generation)',
-      description:
-        'Build intelligent systems that combine your knowledge bases with AI for accurate, context-rich responses in tools like internal search or customer queries.',
-      icon: 'database',
-    },
-    {
-      id: 3,
-      title: 'AI Automations',
-      description:
-        'Automate workflows efficiently, from data handling to process optimization, integrating seamlessly into your existing systems to save time and reduce costs.',
-      icon: 'cog',
-    },
-    {
-      id: 4,
-      title: 'Private AI',
-      description:
-        'Deploy secure, on-premise AI solutions that prioritize data privacy and compliance, keeping your sensitive information in-house while leveraging powerful models.',
-      icon: 'shield',
-    },
-    {
-      id: 5,
-      title: 'Chatbot and Conversational AI Development',
-      description:
-        'Create custom chatbots and conversational agents for customer support, lead generation, or internal tools, using advanced AI for natural, effective interactions.',
-      icon: 'chat',
-    },
-    {
-      id: 6,
-      title: 'AI Consulting',
-      description:
-        'Expert advice on assessing, planning, and implementing AI in your operations, drawing from real-world experience in complex digital environments.',
-      icon: 'lightbulb',
-    },
-  ])
+  const filters = ['All', ...SERVICE_CATEGORIES]
+  const activeFilter = ref('All')
+
+  const visibleServices = computed(() =>
+    activeFilter.value === 'All'
+      ? SERVICES
+      : SERVICES.filter((s) => s.category === activeFilter.value)
+  )
 
   const emit = defineEmits(['inquire'])
 

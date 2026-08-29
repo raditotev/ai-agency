@@ -1,36 +1,30 @@
 <template>
-  <div class="service-card" ref="cardRef">
-    <div class="service-icon">
-      <Icon :name="icon" />
-    </div>
+  <article class="service-card" ref="cardRef">
+    <span class="service-icon"><Icon :name="icon" :size="30" /></span>
+
+    <span class="service-tag">{{ tag }}</span>
     <h3>{{ title }}</h3>
     <p>{{ description }}</p>
+
     <button
-      class="btn"
+      class="service-inquire"
       @click="handleInquire"
       :aria-label="`Inquire about ${title}`"
     >
-      Inquire Now
+      Inquire
+      <Icon name="arrow-right" :size="15" />
     </button>
-  </div>
+  </article>
 </template>
 
 <script setup>
   import { ref, onMounted } from 'vue'
 
   const props = defineProps({
-    title: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    icon: {
-      type: String,
-      required: true,
-    },
+    title: { type: String, required: true },
+    tag: { type: String, required: true },
+    description: { type: String, required: true },
+    icon: { type: String, required: true },
   })
 
   const emit = defineEmits(['inquire'])
@@ -42,8 +36,13 @@
     emit('inquire', props.title)
   }
 
-  // Intersection Observer for fade-in animation
+  // Fade cards in as they enter the viewport
   onMounted(() => {
+    if (!cardRef.value) return
+
+    // Cards are visible by default; the observer only plays the entrance.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -56,8 +55,6 @@
       { threshold: 0.1 }
     )
 
-    if (cardRef.value) {
-      observer.observe(cardRef.value)
-    }
+    observer.observe(cardRef.value)
   })
 </script>

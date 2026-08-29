@@ -1,3 +1,5 @@
+import { SERVICES } from './app/utils/services'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -11,6 +13,14 @@ export default defineNuxtConfig({
   },
 
   modules: ['@nuxtjs/sitemap', '@nuxtjs/robots', '@nuxtjs/plausible'],
+
+  vite: {
+    // Vite refuses Host headers it does not know (DNS-rebinding guard), which
+    // blocks the MagicDNS name. Raw tailnet IPs are allowed without this.
+    server: {
+      allowedHosts: ['imac.tailfdeef3.ts.net'],
+    },
+  },
 
   plausible: {
     // Allow tracking on localhost (development)
@@ -45,8 +55,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'keywords',
-          content:
-            'custom AI models, RAG, AI automations, private AI, chatbot development, AI consulting',
+          content: SERVICES.map((s) => s.title).join(', '),
         },
         {
           property: 'og:title',
@@ -80,11 +89,7 @@ export default defineNuxtConfig({
         },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/icon?family=Material+Icons',
+          href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap',
         },
       ],
       script: [],

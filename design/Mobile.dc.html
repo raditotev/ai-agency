@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+  <style>
+    body { margin: 0; background: #FAF9F7; }
+    a { color: #0E7C5E; text-decoration: none; }
+    a:hover { color: #0B5F48; }
+    .svc { transition: transform .25s ease, box-shadow .25s ease; }
+    .svc:active { transform: scale(.99); }
+  </style>
+</helmet>
+
+<div style="width: 100%; background: #081420; color: #16212B; font-family: 'IBM Plex Sans', 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6;">
+
+  <!-- HERO -->
+  <div style="position: relative; background: #081420; color: #F2F5F7; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 56px 56px;"></div>
+    <div style="position: absolute; top: -140px; right: -180px; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(0,166,118,.22) 0%, rgba(0,166,118,0) 62%);"></div>
+
+    <div style="position: relative; display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,.08);">
+      <div style="display: flex; align-items: baseline; gap: 8px;">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; color: #FFFFFF;">RadiPro</span>
+        <span style="width: 4px; height: 4px; border-radius: 50%; background: {{accent}}; display: inline-block;"></span>
+      </div>
+      <button type="button" aria-label="Open menu" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid rgba(255,255,255,.18); border-radius: 10px; cursor: pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(242,245,247,.85)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      </button>
+    </div>
+
+    <div style="position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 48px 20px 56px;">
+      <div style="display: flex; align-items: center; gap: 9px; font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: {{accent}};">
+        <span style="width: 20px; height: 1px; background: {{accent}}; display: inline-block;"></span>
+        <span>AI systems, built to spec</span>
+      </div>
+      <h1 style="font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 40px; line-height: 1.06; letter-spacing: -.3px; margin: 0; color: #FFFFFF; text-wrap: balance;">
+        Custom AI that fits how your business actually works.
+      </h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.62; color: rgba(242,245,247,.72); text-wrap: pretty;">
+        Fine-tuned models, retrieval systems and automations, built around your data and deployed into the tools your team already uses.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 6px;">
+        <a href="#contact" style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; background: {{accent}}; color: #061019; font-weight: 600; font-size: 16px; border-radius: 12px;">
+          Start a conversation
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="#services" style="display: flex; align-items: center; justify-content: center; min-height: 52px; border: 1px solid rgba(255,255,255,.24); border-radius: 12px; color: rgba(242,245,247,.85); font-size: 16px; font-weight: 500;">
+          See what we build
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div style="padding: 56px 20px 60px; background: #FAF9F7;">
+    <div style="display: flex; flex-direction: column; gap: 26px;">
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 9px; font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #0E7C5E;">
+          <span style="width: 20px; height: 1px; background: {{accent}}; display: inline-block;"></span>
+          <span>Services</span>
+        </div>
+        <h2 style="font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 32px; line-height: 1.12; margin: 0; color: #101B24; text-wrap: balance;">
+          Eight ways we put AI to work.
+        </h2>
+        <p style="margin: 0; font-size: 15px; line-height: 1.62; color: #5A6B78; text-wrap: pretty;">
+          Every engagement starts with your data and your constraints.
+        </p>
+      </div>
+
+      <!-- filter: same chips, they wrap instead of scrolling -->
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid #E7E3DC; padding-top: 20px;">
+        <sc-for list="{{chips}}" as="chip" hint-placeholder-count="4">
+          <span style="font-size: 13.5px; font-weight: 500; min-height: 44px; display: inline-flex; align-items: center; padding: 0 18px; border-radius: 999px; background: {{chip.bg}}; color: {{chip.fg}}; border: 1px solid {{chip.bd}};">{{chip.label}}</span>
+        </sc-for>
+      </div>
+
+      <!-- IDENTICAL grid rule as desktop: flex-wrap + centred remainder -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
+        <sc-for list="{{services}}" as="s" hint-placeholder-count="8">
+          <div class="svc" style="flex: 0 1 352px; display: flex; flex-direction: column; gap: 13px; padding: 24px 22px; background: {{s.cardBg}}; border: {{s.cardBorder}}; border-radius: 16px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{s.iconColor}}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="{{s.p1}}"></path>
+              <path d="{{s.p2}}"></path>
+              <path d="{{s.p3}}"></path>
+            </svg>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <span style="font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: {{s.tagColor}};">{{s.tag}}</span>
+              <h3 style="margin: 0; font-size: 18.5px; line-height: 1.3; font-weight: 600; color: {{s.titleColor}}; text-wrap: balance;">{{s.title}}</h3>
+            </div>
+            <p style="margin: 0; font-size: 14.5px; line-height: 1.6; color: {{s.bodyColor}}; text-wrap: pretty;">{{s.desc}}</p>
+            <span style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; font-size: 14.5px; font-weight: 500; color: {{s.linkColor}};">
+              {{s.linkText}}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div style="background: #0F2233; color: #F2F5F7; padding: 52px 20px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 30px; line-height: 1.12; margin: 0; color: #FFFFFF; text-wrap: balance;">
+        Tell us what you are trying to automate.
+      </h2>
+      <p style="margin: 0; font-size: 15.5px; line-height: 1.62; color: rgba(242,245,247,.68); text-wrap: pretty;">
+        A short conversation about your data, your systems and where the time goes. No obligation.
+      </p>
+      <a href="#contact" style="display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; background: {{accent}}; color: #061019; font-weight: 600; font-size: 16px; border-radius: 12px; margin-top: 4px;">
+        Get in touch
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background: #081420; color: rgba(242,245,247,.55); padding: 26px 20px 34px;">
+    <div style="display: flex; flex-direction: column; gap: 16px; border-top: 1px solid rgba(255,255,255,.08); padding-top: 22px;">
+      <div style="display: flex; align-items: baseline; gap: 9px;">
+        <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 19px; color: rgba(255,255,255,.9);">RadiPro</span>
+        <span style="font-size: 13px;">&copy; 2026</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px; font-size: 13.5px;">
+        <a href="#services" style="color: rgba(242,245,247,.55);">Services</a>
+        <a href="#contact" style="color: rgba(242,245,247,.55);">Contact</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#00A676","options":["#00A676","#5AA9F2","#C46A2E","#7C5CFF"],"section":"Theme"},"extraServices":{"editor":"int","default":0,"min":0,"max":4,"section":"Layout"},"$preview":{"width":390,"height":4050}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var accent = this.props.accent || '#00A676';
+    var extra = this.props.extraServices;
+    if (extra === undefined || extra === null) extra = 0;
+
+    var base = [
+      {
+        cat: 'Build', tag: 'Fine-tuning',
+        title: 'Custom Fine-Tuned Models',
+        desc: 'Models trained on your data for the tasks generic ones get wrong: your terminology, your formats, your edge cases.',
+        p1: 'M3 7h7M14 7h7M3 12h11M18 12h3M3 17h4M11 17h10',
+        p2: 'M10 7a2 2 0 1 0 4 0a2 2 0 1 0-4 0M14 12a2 2 0 1 0 4 0a2 2 0 1 0-4 0M7 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
+        p3: ''
+      },
+      {
+        cat: 'Build', tag: 'RAG',
+        title: 'Retrieval-Augmented Generation',
+        desc: 'Answers grounded in your own documents and databases, with citations, so staff and customers can trust what comes back.',
+        p1: 'M12 3 3 7.5l9 4.5 9-4.5-9-4.5Z',
+        p2: 'M3 12l9 4.5 9-4.5',
+        p3: 'M3 16.5 12 21l9-4.5'
+      },
+      {
+        cat: 'Integrate', tag: 'Automation',
+        title: 'AI Automations',
+        desc: 'Workflows that run themselves: routing, extraction, drafting and handoffs wired into the systems you already run.',
+        p1: 'M4 12a8 8 0 0 1 13.7-5.6',
+        p2: 'M20 12a8 8 0 0 1-13.7 5.6',
+        p3: 'M18 3v4h-4M6 21v-4h4'
+      },
+      {
+        cat: 'Integrate', tag: 'On-premise',
+        title: 'Private AI',
+        desc: 'Deployments that keep sensitive data inside your network, on your hardware, with the compliance trail to prove it.',
+        p1: 'M12 3 4.5 6v6c0 4.5 3.2 7.5 7.5 9 4.3-1.5 7.5-4.5 7.5-9V6L12 3Z',
+        p2: 'M12 10.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3',
+        p3: 'M12 13.6v2.4'
+      },
+      {
+        cat: 'Build', tag: 'Conversational',
+        title: 'Chatbots and Agents',
+        desc: 'Assistants for support, lead capture and internal tools that hold context, know your policies and hand over cleanly.',
+        p1: 'M20 14.5A1.5 1.5 0 0 1 18.5 16H9l-5 4V5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5Z',
+        p2: 'M8.5 10h.01M12 10h.01M15.5 10h.01',
+        p3: ''
+      },
+      {
+        cat: 'Advise', tag: 'Consulting',
+        title: 'AI Consulting',
+        desc: 'An honest read on where AI pays off in your operations, what it will cost, and what to leave alone for now.',
+        p1: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0',
+        p2: 'M14.6 9.4 13 13l-3.6 1.6L11 11l3.6-1.6Z',
+        p3: ''
+      },
+      {
+        cat: 'Integrate', tag: 'MCP',
+        title: 'MCP Servers for Your Tools',
+        desc: 'An MCP server around the systems you already run, so AI assistants can read and act on them under your access rules.',
+        p1: 'M9.5 10.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1Z',
+        p2: 'M12 9.5V6M14.5 12H18M12 14.5V18M9.5 12H6',
+        p3: 'M10.5 4.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0M18 12a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0M10.5 19.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0M3 12a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0'
+      },
+      {
+        cat: 'Integrate', tag: 'Task agents',
+        title: 'Digital Workers',
+        desc: 'Agents that pick up the everyday work, inbox triage, data entry, reporting, follow-ups, and hand back only what needs a human.',
+        p1: 'M10 6.6h10M10 11.6h10M10 16.6h7',
+        p2: 'M3.5 6.6 5 8.1 7.6 5.2M3.5 11.6 5 13.1 7.6 10.2',
+        p3: 'M3.5 16.6a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0'
+      }
+    ];
+
+    var i;
+    for (i = 0; i < extra; i++) {
+      base.push({
+        cat: 'New', tag: 'To be added', placeholder: true,
+        title: '[NEW SERVICE ' + (i + 1) + ']',
+        desc: '[One or two lines on what this service does and who it is for.]',
+        p1: 'M8 4H6a2 2 0 0 0-2 2v2M4 16v2a2 2 0 0 0 2 2h2M16 20h2a2 2 0 0 0 2-2v-2M20 8V6a2 2 0 0 0-2-2h-2',
+        p2: 'M12 9v6M9 12h6',
+        p3: ''
+      });
+    }
+
+    var services = base.map(function (s) {
+      var ph = s.placeholder === true;
+      return {
+        tag: s.tag,
+        title: s.title,
+        desc: s.desc,
+        p1: s.p1,
+        p2: s.p2,
+        p3: s.p3 || '',
+        cardBg: ph ? 'transparent' : '#FFFFFF',
+        cardBorder: ph ? '1px dashed #CFD6DA' : '1px solid #E7E3DC',
+        iconColor: ph ? '#9AA8B2' : accent,
+        tagColor: ph ? '#9AA8B2' : '#8A9AA5',
+        titleColor: ph ? '#7B8993' : '#101B24',
+        bodyColor: ph ? '#9AA8B2' : '#54646F',
+        linkColor: ph ? '#9AA8B2' : accent,
+        linkText: ph ? 'Your next service' : 'Inquire'
+      };
+    });
+
+    var chips = ['All', 'Build', 'Integrate', 'Advise'].map(function (label) {
+      var on = label === 'All';
+      return {
+        label: label,
+        bg: on ? accent : 'transparent',
+        fg: on ? '#FFFFFF' : '#5A6B78',
+        bd: on ? accent : '#DCD7CF'
+      };
+    });
+
+    return { accent: accent, services: services, chips: chips };
+  }
+}
+</script>
+</body>
+</html>
